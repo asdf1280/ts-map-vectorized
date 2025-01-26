@@ -1,11 +1,8 @@
 ﻿using System.Drawing;
 
-namespace TsMap.Canvas
-{
-    public class SimpleMapPalette : MapPalette
-    {
-        public SimpleMapPalette()
-        {
+namespace TsMap.Canvas {
+    public class SimpleMapPalette : MapPalette {
+        public SimpleMapPalette() {
             Background = new SolidBrush(Color.FromArgb(72, 78, 102));
             Road = Brushes.White;
             PrefabRoad = Brushes.White;
