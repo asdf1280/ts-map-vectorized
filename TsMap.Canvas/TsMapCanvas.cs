@@ -172,6 +172,12 @@ namespace TsMap.Canvas
                     }
                 }
 
+                Directory.CreateDirectory($"{exportPath}");
+                using (var fw = new FileStream($"{exportPath}/Renderer.txt", FileMode.Create))
+                using (var sw = new StreamWriter(fw)) {
+                    _renderer.RenderAsVector(sw, renderFlags);
+                }
+
                 if (!createTiles) return;
 
                 for (int z = startZoomLevel; z <= endZoomLevel; z++) // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
