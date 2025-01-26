@@ -556,7 +556,7 @@ namespace TsMap
                         bezierPoints.Add(new PointF(conn.EndPortLocation.X, conn.EndPortLocation.Y)); // end
 
                         //g.DrawBeziers(ferryPen, bezierPoints.ToArray());
-                        writer.WriteLine($"BEZ {bezierPoints.Count};ferry");
+                        writer.WriteLine($"BEZ {bezierPoints.Count};ferry;50");
                         foreach (var point in bezierPoints) {
                             writer.WriteLine(FloatSerializer.Serialize(point));
                         }
@@ -842,7 +842,8 @@ namespace TsMap
                     var node = _mapper.GetNodeByUid(city.NodeUid);
                     var coords = (node == null) ? new PointF(city.X, city.Z) : new PointF(node.X, node.Z);
 
-                    writer.WriteLine($"TEXT {name};{coords.X};{coords.Y}");
+                    writer.WriteLine($"TEXT {name}");
+                    writer.WriteLine(FloatSerializer.Serialize(coords));
                 }
                 //cityFont.Dispose();
             }
