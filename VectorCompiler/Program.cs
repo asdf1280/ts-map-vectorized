@@ -1,8 +1,14 @@
 ﻿using System.Text;
 
-Console.WriteLine("Enter the path:");
+string? path = null;
 
-string? path = Console.ReadLine();
+if (args.Length > 0 && !string.IsNullOrWhiteSpace(args[0])) {
+    path = args[0];
+    Console.WriteLine("Path via params");
+} else {
+    Console.WriteLine("Enter the path:");
+    path = Console.ReadLine();
+}
 
 if (path == null) {
     Console.WriteLine("Path is null");
@@ -11,17 +17,16 @@ if (path == null) {
 
 var file = File.ReadAllLines(path);
 
-if(file == null) {
-    Console.WriteLine("File is null");
-    return;
-}
+var directory = Path.GetDirectoryName(path) ?? Directory.GetCurrentDirectory();
+var baseName = "output";
+var extension = ".bin";
 
-Console.WriteLine("Enter output path:");
-string? outPath = Console.ReadLine();
+string outPath = Path.Combine(directory, baseName + extension);
 
-if (outPath == null) {
-    Console.WriteLine("Output path is null");
-    return;
+int n = 1;
+while (File.Exists(outPath)) {
+    outPath = Path.Combine(directory, $"{baseName}_{n}{extension}");
+    n++;
 }
 
 BinaryWriter fWriter = new BinaryWriter(File.Open(outPath, FileMode.Create));
