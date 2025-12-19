@@ -154,46 +154,10 @@ namespace TsMap.Canvas
                 }
                 RedrawMap(true);
 
-                if (saveInfo || startZoomLevel == 0)
-                {
-                    ZoomOutAndCenterMap(tileSize, tileSize, out PointF pos,
-                        out float zoom); // get zoom and start coords for tile level 0
-                    if (saveInfo)
-                    {
-                        JsonHelper.SaveTileMapInfo(exportPath, pos.X, pos.X + tileSize / zoom, pos.Y,
-                            pos.Y + tileSize / zoom, startZoomLevel, endZoomLevel);
-                    }
-
-                    if (startZoomLevel == 0 && createTiles)
-                    {
-                        SaveTileImage(0, 0, 0, pos, zoom, exportPath, renderFlags);
-                        _currentGeneratedTile = 1;
-                        startZoomLevel++;
-                    }
-                }
-
                 Directory.CreateDirectory($"{exportPath}");
                 using (var fw = new FileStream($"{exportPath}/Renderer.txt", FileMode.Create))
                 using (var sw = new StreamWriter(fw)) {
                     _renderer.RenderAsVector(sw, renderFlags);
-                }
-
-                if (!createTiles) return;
-
-                for (int z = startZoomLevel; z <= endZoomLevel; z++) // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-                {
-                    ZoomOutAndCenterMap((int) Math.Pow(2, z) * tileSize, (int) Math.Pow(2, z) * tileSize,
-                        out PointF pos, out float zoom); // get zoom and start coords for current tile level
-
-                    for (int x = 0; x < Math.Pow(2, z); x++)
-                    {
-                        for (int y = 0; y < Math.Pow(2, z); y++)
-                        {
-                            SaveTileImage(z, x, y, pos, zoom, exportPath, renderFlags);
-                            _currentGeneratedTile++;
-                            RedrawMap(true);
-                        }
-                    }
                 }
             }).ContinueWith(_ =>
             {

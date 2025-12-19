@@ -639,10 +639,12 @@ namespace TsMap
                             {
                                 Dictionary<int, PointF> polyPoints = new Dictionary<int, PointF>();
                                 var nextPoint = i;
-                                do {
+                                do
+                                {
                                     if (prefabItem.Prefab.MapPoints[nextPoint].Neighbours.Count == 0) break;
 
-                                    foreach (var neighbour in prefabItem.Prefab.MapPoints[nextPoint].Neighbours) {
+                                    foreach (var neighbour in prefabItem.Prefab.MapPoints[nextPoint].Neighbours)
+                                    {
                                         if (!polyPoints.ContainsKey(neighbour)) // New Polygon Neighbour
                                         {
                                             nextPoint = neighbour;
@@ -662,18 +664,33 @@ namespace TsMap
 
                                 var visualFlag = prefabItem.Prefab.MapPoints[polyPoints.First().Key].PrefabColorFlags;
 
-                                string fillColor = "light";
+                                string fillColor;
                                 var roadOver = MemoryHelper.IsBitSet(visualFlag, 0); // Road Over flag
                                 var zIndex = roadOver ? 10 : 0;
-                                if (MemoryHelper.IsBitSet(visualFlag, 1)) {
-                                    fillColor = "light";
-                                } else if (MemoryHelper.IsBitSet(visualFlag, 2)) {
-                                    fillColor = "dark";
-                                    zIndex = roadOver ? 11 : 1;
-                                } else if (MemoryHelper.IsBitSet(visualFlag, 3)) {
-                                    fillColor = "green";
-                                    zIndex = roadOver ? 12 : 2;
+                                if (MemoryHelper.IsBitSet(visualFlag, 1))
+                                {
+                                    fillColor = "prefabLight";
                                 }
+                                else if (MemoryHelper.IsBitSet(visualFlag, 2))
+                                {
+                                    fillColor = "prefabDark";
+                                    zIndex = roadOver ? 11 : 1;
+                                }
+                                else if (MemoryHelper.IsBitSet(visualFlag, 3))
+                                {
+                                    fillColor = "prefabGreen";
+                                    zIndex = roadOver ? 12 : 2;
+                                //}
+                                //else if(visualFlag != 0)
+                                //{
+                                //    // hex of visualFlag
+                                //    fillColor = "UNKNOWN#" + visualFlag.ToString("x");
+                                //} else {
+                                //    fillColor = "light";
+                                } else {
+                                    fillColor = "light";
+                                }
+
                                 // else fillColor = _palette.Error; // Unknown
 
                                 var prefabLook = new TsPrefabPolyVectorLook(polyPoints.Values.ToList()) {
@@ -703,13 +720,15 @@ namespace TsMap
 
                                 var neighbourLaneCount = neighbourPoint.LaneCount;
 
-                                if (neighbourLaneCount == -2 && neighbourPointIndex < prefabItem.Prefab.PrefabNodes.Count) {
+                                if (neighbourLaneCount == -2 && neighbourPointIndex < prefabItem.Prefab.PrefabNodes.Count)
+                                {
                                     if (neighbourPoint.ControlNodeIndex != -1) neighbourLaneCount = prefabItem.Prefab.PrefabNodes[neighbourPoint.ControlNodeIndex].LaneCount;
                                 }
 
                                 if (mapPointLaneCount == -2 && neighbourLaneCount != -2) mapPointLaneCount = neighbourLaneCount;
                                 else if (neighbourLaneCount == -2 && mapPointLaneCount != -2) neighbourLaneCount = mapPointLaneCount;
-                                else if (mapPointLaneCount == -2 && neighbourLaneCount == -2) {
+                                else if (mapPointLaneCount == -2 && neighbourLaneCount == -2)
+                                {
                                     Logger.Instance.Debug($"Could not find lane count for ({i}, {neighbourPointIndex}), defaulting to 1 for {prefabItem.Prefab.FilePath}");
                                     mapPointLaneCount = neighbourLaneCount = 1;
                                 }
