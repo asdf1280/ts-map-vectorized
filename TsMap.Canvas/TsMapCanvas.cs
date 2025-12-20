@@ -146,14 +146,6 @@ namespace TsMap.Canvas
 
             Task.Run(() =>
             {
-                _currentGeneratedTile = 0;
-                _totalTileCount = 0;
-                for (var z = startZoomLevel; z <= endZoomLevel; z++)
-                {
-                    _totalTileCount += (uint)Math.Pow(4, z);
-                }
-                RedrawMap(true);
-
                 Directory.CreateDirectory($"{exportPath}");
                 using (var fw = new FileStream($"{exportPath}/Renderer.txt", FileMode.Create))
                 using (var sw = new StreamWriter(fw)) {
