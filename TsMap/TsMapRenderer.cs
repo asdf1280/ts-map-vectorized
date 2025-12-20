@@ -483,11 +483,7 @@ namespace TsMap
         public void RenderAsVector(StreamWriter writer, RenderFlags renderFlags = RenderFlags.All) {
             // Warning: This function does NOT translate or scale coordinates. It will store game coordinates itself, affecting the specified range. When rendering the vector image, you must convert them on your own.
 
-            //g.ScaleTransform(scale, scale);
-            //g.TranslateTransform(-startPoint.X, -startPoint.Y);
-            //g.InterpolationMode = InterpolationMode.NearestNeighbor;
-            //g.PixelOffsetMode = PixelOffsetMode.None;
-            //g.SmoothingMode = SmoothingMode.AntiAlias;
+            renderFlags = RenderFlags.All;
 
             if (_mapper == null) {
                 //g.DrawString("Map object not initialized", _defaultFont, palette.Error, 5, 5);
@@ -497,7 +493,7 @@ namespace TsMap
 
             var dlcGuards = _mapper.GetDlcGuardsForCurrentGame();
 
-            var activeDlcGuards = dlcGuards.Where(x => x.Enabled).Select(x => x.Index).ToList();
+            var activeDlcGuards = dlcGuards/*.Where(x => x.Enabled)*/.Select(x => x.Index).ToList();
 
             var ferryStartTime = DateTime.Now.Ticks;
             if (renderFlags.IsActive(RenderFlags.FerryConnections)) {
