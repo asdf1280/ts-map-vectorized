@@ -76,8 +76,15 @@ namespace TsMap.Canvas
 
             MapPanel.MouseWheel += (s, e) =>
             {
+                var mouseWorldX = e.X / _scale + _startPoint.X;
+                var mouseWorldY = e.Y / _scale + _startPoint.Y;
+                
                 _scale += (e.Delta > 0 ? 1 : -1) * 0.05f * _scale;
                 _scale = Math.Max(_scale, 0.0005f);
+
+                _startPoint.X = mouseWorldX - e.X / _scale;
+                _startPoint.Y = mouseWorldY - e.Y / _scale;
+                
                 RedrawMap();
             };
 
