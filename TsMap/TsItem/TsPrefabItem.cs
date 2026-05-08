@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using TsMap.Common;
@@ -17,6 +17,8 @@ namespace TsMap.TsItem
         public TsPrefab Prefab { get; private set; }
         private List<TsPrefabLook> _looks;
 
+        private List<TsPrefabVectorLook> _vectorLooks;
+
         public bool IsSecret { get; private set; }
 
         public void AddLook(TsPrefabLook look)
@@ -34,10 +36,26 @@ namespace TsMap.TsItem
             return _looks != null && _looks.Count != 0;
         }
 
+        public void AddVectorLook(TsPrefabVectorLook look)
+        {
+            _vectorLooks.Add(look);
+        }
+
+        public List<TsPrefabVectorLook> GetVectorLooks()
+        {
+            return _vectorLooks;
+        }
+
+        public bool HasVectorLooks()
+        {
+            return _vectorLooks != null && _vectorLooks.Count != 0;
+        }
+
         public TsPrefabItem(TsSector sector, int startOffset) : base(sector, startOffset)
         {
             Valid = true;
             _looks = new List<TsPrefabLook>();
+            _vectorLooks = new List<TsPrefabVectorLook>();
             Nodes = new List<ulong>();
             if (Sector.Version < 829)
                 TsPrefabItem825(startOffset);

@@ -573,12 +573,6 @@ namespace TsMap
                 var drawingQueue = new List<TsPrefabPolyVectorLook>();
                 foreach (var mapArea in _mapper.MapAreas)
                 {
-                    if (!activeDlcGuards.Contains(mapArea.DlcGuard) ||
-                        mapArea.IsSecret && !renderFlags.IsActive(RenderFlags.SecretRoads))
-                    {
-                        continue;
-                    }
-
                     var points = new List<PointF>();
 
                     foreach (var mapAreaNode in mapArea.NodeUids)
@@ -588,21 +582,21 @@ namespace TsMap
                         points.Add(new PointF(node.X, node.Z));
                     }
 
-                    string fillColor = "road";
+                    string fillColor = "prefabRoad";
                     var zIndex = mapArea.DrawOver ? 10 : 0;
                     if ((mapArea.ColorIndex & 0x03) == 3)
                     {
-                        fillColor = "green";
+                        fillColor = "prefabGreen";
                         zIndex = mapArea.DrawOver ? 13 : 3;
                     }
                     else if ((mapArea.ColorIndex & 0x02) == 2)
                     {
-                        fillColor = "dark";
+                        fillColor = "prefabDark";
                         zIndex = mapArea.DrawOver ? 12 : 2;
                     }
                     else if ((mapArea.ColorIndex & 0x01) == 1)
                     {
-                        fillColor = "light";
+                        fillColor = "prefabLight";
                         zIndex = mapArea.DrawOver ? 11 : 1;
                     }
 
@@ -627,16 +621,10 @@ namespace TsMap
 
                 foreach (var prefabItem in _mapper.Prefabs)
                 {
-                    if (!activeDlcGuards.Contains(prefabItem.DlcGuard) ||
-                        prefabItem.IsSecret && !renderFlags.IsActive(RenderFlags.SecretRoads))
-                    {
-                        continue;
-                    }
-
                     var originNode = _mapper.GetNodeByUid(prefabItem.Nodes[0]);
                     if (prefabItem.Prefab.PrefabNodes == null) continue;
 
-                    if (true || !prefabItem.HasLooks())
+                    if (!prefabItem.HasVectorLooks()) // No look caching for vector output available.
                     {
                         var mapPointOrigin = prefabItem.Prefab.PrefabNodes[prefabItem.Origin];
 
@@ -708,7 +696,7 @@ namespace TsMap
                                 }
                                 else
                                 {
-                                    fillColor = "light";
+                                    fillColor = "prefabLight";
                                 }
 
                                 // else fillColor = _palette.Error; // Unknown
@@ -719,7 +707,7 @@ namespace TsMap
                                     Color = fillColor
                                 };
 
-                                drawingQueue.Add(prefabLook);
+                                prefabItem.AddVectorLook(prefabLook);
                                 continue;
                             }
 
@@ -776,16 +764,18 @@ namespace TsMap
                                     (Consts.LaneWidth * mapPointLaneCount + mapPoint.LaneOffset) / 2f, roadYaw - Math.PI / 2);
                                 cornerCoords.Add(RenderHelper.RotatePoint(coords.X, coords.Y, rot, originNode.X, originNode.Z));
 
-                                TsPrefabVectorLook prefabLook = new TsPrefabPolyVectorLook(cornerCoords)
+                                TsPrefabPolyVectorLook prefabLook = new TsPrefabPolyVectorLook(cornerCoords)
                                 {
-                                    Color = "road",
+                                    Color = "prefabRoad",
                                     ZIndex = MemoryHelper.IsBitSet(mapPoint.PrefabColorFlags, 0) ? 13 : 3,
                                 };
 
-                                drawingQueue.Add(prefabLook);
+                                prefabItem.AddVectorLook(prefabLook);
                             }
                         }
                     }
+
+                    prefabItem.GetVectorLooks().ForEach(x => drawingQueue.Add(x));
                 }
 
                 foreach (var prefabLook in drawingQueue.OrderBy(p => p.ZIndex))

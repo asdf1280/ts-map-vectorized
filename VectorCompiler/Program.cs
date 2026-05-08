@@ -15,6 +15,11 @@ if (path == null) {
     return;
 }
 
+// If wrapped with quotes, remove them
+if (!string.IsNullOrWhiteSpace(path)) {
+    path = path.Trim('"');
+}
+
 var file = File.ReadAllLines(path);
 
 var directory = Path.GetDirectoryName(path) ?? Directory.GetCurrentDirectory();
