@@ -140,33 +140,48 @@ namespace TsMap
 
                     Brush fillColor = palette.PrefabRoad;
                     var zIndex = mapArea.DrawOver ? 10 : 0;
-                    if ((mapArea.ColorIndex & 0x08) == 8) {
+                    if ((mapArea.ColorIndex & 0x08) == 8)
+                    {
                         // 6e3ea9
                         fillColor = palette.SpecialColor8;
                         zIndex = 100;
-                    } else if ((mapArea.ColorIndex & 0x07) == 7) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x07) == 7)
+                    {
                         // ecd424
                         fillColor = palette.SpecialColor7;
                         zIndex = 100;
-                    } else if ((mapArea.ColorIndex & 0x06) == 6) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x06) == 6)
+                    {
                         // 2f77d9
                         fillColor = palette.SpecialColor6;
                         zIndex = 100;
-                    } else if ((mapArea.ColorIndex & 0x05) == 5) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x05) == 5)
+                    {
                         // 4da535
                         fillColor = palette.SpecialColor5;
                         zIndex = 100;
-                    } else if ((mapArea.ColorIndex & 0x04) == 4) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x04) == 4)
+                    {
                         // 990000
                         fillColor = palette.SpecialColor4;
                         zIndex = 100;
-                    } else if ((mapArea.ColorIndex & 0x03) == 3) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x03) == 3)
+                    {
                         fillColor = palette.PrefabGreen;
                         zIndex = mapArea.DrawOver ? 13 : 3;
-                    } else if ((mapArea.ColorIndex & 0x02) == 2) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x02) == 2)
+                    {
                         fillColor = palette.PrefabDark;
                         zIndex = mapArea.DrawOver ? 12 : 2;
-                    } else if ((mapArea.ColorIndex & 0x01) == 1) {
+                    }
+                    else if ((mapArea.ColorIndex & 0x01) == 1)
+                    {
                         fillColor = palette.PrefabLight;
                         zIndex = mapArea.DrawOver ? 11 : 1;
                     }
@@ -599,31 +614,31 @@ namespace TsMap
 
                     string fillColor = "prefabRoad";
                     var zIndex = mapArea.DrawOver ? 10 : 0;
-                    if (mapArea.ColorIndex == 8)
+                    if ((mapArea.ColorIndex & 0x08) == 8)
                     {
                         // 6e3ea9
                         fillColor = "palette8";
                         zIndex = 100;
                     }
-                    else if (mapArea.ColorIndex == 7)
+                    else if ((mapArea.ColorIndex & 0x07) == 7)
                     {
                         // ecd424
                         fillColor = "palette7";
                         zIndex = 100;
                     }
-                    else if (mapArea.ColorIndex == 6)
+                    else if ((mapArea.ColorIndex & 0x06) == 6)
                     {
                         // 2f77d9
                         fillColor = "palette6";
                         zIndex = 100;
                     }
-                    else if (mapArea.ColorIndex == 5)
+                    else if ((mapArea.ColorIndex & 0x05) == 5)
                     {
                         // 4da535
                         fillColor = "palette5";
                         zIndex = 100;
                     }
-                    else if (mapArea.ColorIndex == 4)
+                    else if ((mapArea.ColorIndex & 0x04) == 4)
                     {
                         // 990000
                         fillColor = "palette4";
