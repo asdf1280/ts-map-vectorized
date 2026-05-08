@@ -1,4 +1,4 @@
-﻿namespace TsMap
+namespace TsMap
 {
     public class Settings
     {

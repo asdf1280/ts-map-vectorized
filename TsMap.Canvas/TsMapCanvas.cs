@@ -78,13 +78,13 @@ namespace TsMap.Canvas
             {
                 var mouseWorldX = e.X / _scale + _startPoint.X;
                 var mouseWorldY = e.Y / _scale + _startPoint.Y;
-                
+
                 _scale += (e.Delta > 0 ? 1 : -1) * 0.05f * _scale;
                 _scale = Math.Max(_scale, 0.0005f);
 
                 _startPoint.X = mouseWorldX - e.X / _scale;
                 _startPoint.Y = mouseWorldY - e.Y / _scale;
-                
+
                 RedrawMap();
             };
 
@@ -153,48 +153,11 @@ namespace TsMap.Canvas
 
             Task.Run(() =>
             {
-                _currentGeneratedTile = 0;
-                _totalTileCount = 0;
-                for (var z = startZoomLevel; z <= endZoomLevel; z++)
+                Directory.CreateDirectory($"{exportPath}");
+                using (var fw = new FileStream($"{exportPath}/Renderer.txt", FileMode.Create))
+                using (var sw = new StreamWriter(fw))
                 {
-                    _totalTileCount += (uint)Math.Pow(4, z);
-                }
-                RedrawMap(true);
-
-                if (saveInfo || startZoomLevel == 0)
-                {
-                    ZoomOutAndCenterMap(tileSize, tileSize, out PointF pos,
-                        out float zoom); // get zoom and start coords for tile level 0
-                    if (saveInfo)
-                    {
-                        JsonHelper.SaveTileMapInfo(exportPath, pos.X, pos.X + tileSize / zoom, pos.Y,
-                            pos.Y + tileSize / zoom, startZoomLevel, endZoomLevel);
-                    }
-
-                    if (startZoomLevel == 0 && createTiles)
-                    {
-                        SaveTileImage(0, 0, 0, pos, zoom, exportPath, renderFlags);
-                        _currentGeneratedTile = 1;
-                        startZoomLevel++;
-                    }
-                }
-
-                if (!createTiles) return;
-
-                for (int z = startZoomLevel; z <= endZoomLevel; z++) // https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-                {
-                    ZoomOutAndCenterMap((int) Math.Pow(2, z) * tileSize, (int) Math.Pow(2, z) * tileSize,
-                        out PointF pos, out float zoom); // get zoom and start coords for current tile level
-
-                    for (int x = 0; x < Math.Pow(2, z); x++)
-                    {
-                        for (int y = 0; y < Math.Pow(2, z); y++)
-                        {
-                            SaveTileImage(z, x, y, pos, zoom, exportPath, renderFlags);
-                            _currentGeneratedTile++;
-                            RedrawMap(true);
-                        }
-                    }
+                    _renderer.RenderAsVector(sw, renderFlags);
                 }
             }).ContinueWith(_ =>
             {
@@ -254,7 +217,7 @@ namespace TsMap.Canvas
 
                     e.Graphics.ResetTransform();
                     e.Graphics.FillRectangle(Brushes.Black, new Rectangle(0, 0, e.ClipRectangle.Width, e.ClipRectangle.Height));
-                    e.Graphics.DrawString( $"Generating Tile Map, current tile: {_currentGeneratedTile}/{_totalTileCount}", font,
+                    e.Graphics.DrawString($"Generating Tile Map, current tile: {_currentGeneratedTile}/{_totalTileCount}", font,
                         Brushes.CornflowerBlue, 10, 10);
 
                     if (_totalTileCount == 0)
