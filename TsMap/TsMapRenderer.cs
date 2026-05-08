@@ -599,7 +599,37 @@ namespace TsMap
 
                     string fillColor = "prefabRoad";
                     var zIndex = mapArea.DrawOver ? 10 : 0;
-                    if ((mapArea.ColorIndex & 0x03) == 3)
+                    if (mapArea.ColorIndex == 8)
+                    {
+                        // 6e3ea9
+                        fillColor = "palette8";
+                        zIndex = 100;
+                    }
+                    else if (mapArea.ColorIndex == 7)
+                    {
+                        // ecd424
+                        fillColor = "palette7";
+                        zIndex = 100;
+                    }
+                    else if (mapArea.ColorIndex == 6)
+                    {
+                        // 2f77d9
+                        fillColor = "palette6";
+                        zIndex = 100;
+                    }
+                    else if (mapArea.ColorIndex == 5)
+                    {
+                        // 4da535
+                        fillColor = "palette5";
+                        zIndex = 100;
+                    }
+                    else if (mapArea.ColorIndex == 4)
+                    {
+                        // 990000
+                        fillColor = "palette4";
+                        zIndex = 100;
+                    }
+                    else if ((mapArea.ColorIndex & 0x03) == 3)
                     {
                         fillColor = "prefabGreen";
                         zIndex = mapArea.DrawOver ? 13 : 3;
